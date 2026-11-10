@@ -29,4 +29,12 @@ public interface HologramProvider {
     void spawn(String name, Location location, List<String> lines);
 
     void destroy(String name, Location location);
+
+    /**
+     * Whether the named hologram still exists. Providers whose holograms can vanish on their own
+     * (for example on chunk unload) return false so the generator task spawns them again.
+     */
+    default boolean isSpawned(String name) {
+        return true;
+    }
 }

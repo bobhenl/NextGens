@@ -5,6 +5,7 @@ import com.muhammaddaffa.nextgens.NextGens;
 import com.muhammaddaffa.nextgens.hologram.imp.DecentHologramsProvider;
 import com.muhammaddaffa.nextgens.hologram.imp.FancyHologramProvider;
 import com.muhammaddaffa.nextgens.hologram.imp.HolographicDisplaysProvider;
+import com.muhammaddaffa.nextgens.hologram.imp.NativeHologramProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -99,6 +100,13 @@ public class HologramManager {
     public void load() {
         FileConfiguration config = NextGens.DEFAULT_CONFIG.getConfig();
         String configId = config.getString("holograms.type");
+
+        // 0. Built-in text display holograms, no hologram plugin needed.
+        if ("native".equalsIgnoreCase(configId)) {
+            this.provider = new NativeHologramProvider();
+            Logger.info("Using built-in text display holograms.");
+            return;
+        }
 
         // 1. Try to honour the configured provider first.
         if (configId != null && !configId.isBlank()) {

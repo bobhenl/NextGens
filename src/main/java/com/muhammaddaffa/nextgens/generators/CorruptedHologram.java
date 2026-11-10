@@ -39,6 +39,11 @@ public class CorruptedHologram {
         manager.getProvider().destroy(this.name, this.hologramLocation);
     }
 
+    public boolean isSpawned() {
+        HologramManager manager = NextGens.getInstance().getHologramManager();
+        return !manager.isEnabled() || manager.getProvider().isSpawned(this.name);
+    }
+
     private String getCleanNames(String text) {
         return text.replace(",", "")
                 .replace(".", "")
