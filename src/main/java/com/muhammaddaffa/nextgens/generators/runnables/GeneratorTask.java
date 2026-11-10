@@ -82,7 +82,7 @@ public class GeneratorTask extends GensRunnable {
                 continue;
             }
             if (active.getLocation().getWorld() == null ||
-                    Settings.BLACKLISTED_WORLDS.contains(active.getLocation().getWorld().getName())) {
+                    !Settings.isGeneratorWorld(active.getLocation().getWorld().getName())) {
                 continue;
             }
             // check for online-only option
@@ -102,6 +102,11 @@ public class GeneratorTask extends GensRunnable {
             }
             // check for corruption option
             if (Settings.CORRUPTION_ENABLED && active.isCorrupted()) {
+                // the hologram vanished on its own (e.g. chunk unload), spawn it again
+                CorruptedHologram existing = this.hologramMap.get(active);
+                if (Settings.CORRUPTION_HOLOGRAM && existing != null && !existing.isSpawned()) {
+                    this.hologramMap.remove(active);
+                }
                 // check if hologram is enabled
                 if (Settings.CORRUPTION_HOLOGRAM && !this.hologramMap.containsKey(active)) {
                     CorruptedHologram hologram = new CorruptedHologram(active);

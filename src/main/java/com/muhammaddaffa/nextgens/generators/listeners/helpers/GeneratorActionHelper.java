@@ -1,6 +1,6 @@
 package com.muhammaddaffa.nextgens.generators.listeners.helpers;
 
-import com.muhammaddaffa.mdlib.hooks.VaultEconomy;
+import com.muhammaddaffa.nextgens.utils.GensEconomy;
 import com.muhammaddaffa.mdlib.utils.Common;
 import com.muhammaddaffa.mdlib.utils.Placeholder;
 import com.muhammaddaffa.nextgens.NextGens;
@@ -48,7 +48,7 @@ final class GeneratorActionHelper {
     static boolean withdraw(Player player, double cost, BooleanSupplier current) {
         if (!Double.isFinite(cost) || cost < 0) return failed(player);
         try {
-            double balance = VaultEconomy.getBalance(player);
+            double balance = GensEconomy.getBalance(player);
             if (!Double.isFinite(balance)) return failed(player);
             if (balance < cost) {
                 NextGens.DEFAULT_CONFIG.sendMessage(player, "messages.not-enough-money", new Placeholder()
@@ -60,7 +60,7 @@ final class GeneratorActionHelper {
             }
             if (!current.getAsBoolean()) return false;
             if (cost == 0) return true;
-            EconomyResponse response = VaultEconomy.withdraw(player, cost);
+            EconomyResponse response = GensEconomy.withdraw(player, cost);
             if (response == null || !response.transactionSuccess()) return failed(player);
         } catch (RuntimeException exception) {
             return failed(player);
@@ -68,7 +68,7 @@ final class GeneratorActionHelper {
         // A provider callback can remove the generator or revoke access while taking payment.
         if (current.getAsBoolean()) return true;
         try {
-            EconomyResponse refund = VaultEconomy.deposit(player, cost);
+            EconomyResponse refund = GensEconomy.deposit(player, cost);
             if (refund == null || !refund.transactionSuccess()) {
                 NextGens.getInstance().getLogger().severe("A stale generator action could not refund its payment.");
             }

@@ -13,6 +13,7 @@ import com.muhammaddaffa.nextgens.generators.listeners.helpers.GeneratorParticle
 import com.muhammaddaffa.nextgens.generators.managers.GeneratorManager;
 import com.muhammaddaffa.nextgens.requirements.GensRequirement;
 import com.muhammaddaffa.nextgens.users.UserManager;
+import com.muhammaddaffa.nextgens.utils.Settings;
 import com.muhammaddaffa.nextgens.utils.Utils;
 import com.muhammaddaffa.nextgens.utils.VisualAction;
 import org.bukkit.Bukkit;
@@ -111,7 +112,7 @@ public record GeneratorPlaceListener(
     }
 
     private boolean isInBlacklistedWorld(Player player, FileConfiguration config) {
-        return config.getStringList("blacklisted-worlds").contains(player.getWorld().getName());
+        return !Settings.isGeneratorWorld(player.getWorld().getName());
     }
 
     private void notifyInvalidWorld(Player player, BlockPlaceEvent event) {

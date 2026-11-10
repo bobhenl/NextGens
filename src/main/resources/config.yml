@@ -79,6 +79,12 @@ corruption:
     - disabled_generator
     - unbreakable_generator
 
+# Economy
+economy:
+  # ExcellentEconomy currency id to use for all generator money (shop,
+  # upgrades, repairs, selling). Empty = use Vault.
+  excellent-currency: ""
+
 # Hologram System
 # Controls which hologram plugin NextGens hooks into for generator holograms.
 holograms:
@@ -86,6 +92,7 @@ holograms:
   #   - DecentHolograms
   #   - FancyHologram
   #   - HolographicDisplays
+  #   - Native (built-in text displays, no hologram plugin needed)
   # If the chosen plugin isn't loaded (or this is left blank), use the first
   # available provider: DecentHolograms, FancyHolograms, HolographicDisplays.
   # If none is available, warn and keep NextGens running without holograms.
@@ -210,6 +217,9 @@ generator-place-distance:
 blacklisted-worlds:
   - disablegen
   - notagenworld
+# If not empty, generators only work in these worlds (and event
+# messages only reach players in them). Empty = every world.
+whitelisted-worlds: []
 # Generator Limit
 # Define the maximum generator player can have, this value cannot be added
 player-generator-limit:

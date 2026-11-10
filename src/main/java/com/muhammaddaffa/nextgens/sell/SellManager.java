@@ -1,6 +1,6 @@
 package com.muhammaddaffa.nextgens.sell;
 
-import com.muhammaddaffa.mdlib.hooks.VaultEconomy;
+import com.muhammaddaffa.nextgens.utils.GensEconomy;
 import com.muhammaddaffa.mdlib.task.ExecutorManager;
 import com.muhammaddaffa.mdlib.utils.Common;
 import com.muhammaddaffa.mdlib.utils.Placeholder;
@@ -50,7 +50,7 @@ public class SellManager {
         if (value == null || !Double.isFinite(value) || value <= 0) return false;
         // Leave the drop available when the economy provider rejects the payment.
         try {
-            EconomyResponse response = VaultEconomy.deposit(player, value);
+            EconomyResponse response = GensEconomy.deposit(player, value);
             if (response == null || !response.transactionSuccess()) return false;
         } catch (RuntimeException exception) {
             return false;
@@ -141,7 +141,7 @@ public class SellManager {
             for (SaleItem item : items) {
                 item.inventory().setItem(item.slot(), null);
             }
-            EconomyResponse response = VaultEconomy.deposit(player, data.getTotalValue());
+            EconomyResponse response = GensEconomy.deposit(player, data.getTotalValue());
             paid = response != null && response.transactionSuccess();
             if (!paid) {
                 if (!silent) NextGens.DEFAULT_CONFIG.sendMessage(player, "messages.transaction-failed");

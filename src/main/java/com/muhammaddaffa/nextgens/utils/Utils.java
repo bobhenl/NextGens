@@ -1,6 +1,5 @@
 package com.muhammaddaffa.nextgens.utils;
 
-import com.muhammaddaffa.mdlib.hooks.VaultEconomy;
 import com.muhammaddaffa.mdlib.utils.Common;
 import com.muhammaddaffa.mdlib.utils.Placeholder;
 import com.muhammaddaffa.mdlib.xseries.XSound;
@@ -96,7 +95,7 @@ public class Utils {
         // get the cashback amount
         double refund = ((amount * cashbackEvent.getPercentage()) / 100);
         // give back the money to the player
-        VaultEconomy.deposit(player, refund);
+        GensEconomy.deposit(player, refund);
         // send the message only if player has notify on
         if (userManager.getUser(player).isToggleCashback()) {
             NextGens.DEFAULT_CONFIG.sendMessage(player, "messages.cashback", new Placeholder()

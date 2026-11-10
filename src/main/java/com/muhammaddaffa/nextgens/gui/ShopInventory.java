@@ -1,7 +1,7 @@
 package com.muhammaddaffa.nextgens.gui;
 
 import com.muhammaddaffa.mdlib.fastinv.FastInv;
-import com.muhammaddaffa.mdlib.hooks.VaultEconomy;
+import com.muhammaddaffa.nextgens.utils.GensEconomy;
 import com.muhammaddaffa.mdlib.utils.Common;
 import com.muhammaddaffa.mdlib.utils.ItemBuilder;
 import com.muhammaddaffa.mdlib.utils.Placeholder;
@@ -93,11 +93,11 @@ public class ShopInventory extends FastInv {
 
                 this.setItems(Utils.convertListToIntArray(slots), stack, event -> {
                     // money check
-                    if (VaultEconomy.getBalance(this.player) < cost) {
+                    if (GensEconomy.getBalance(this.player) < cost) {
                         NextGens.DEFAULT_CONFIG.sendMessage(this.player, "messages.not-enough-money", new Placeholder()
-                                .add("{money}", Common.digits(VaultEconomy.getBalance(this.player)))
+                                .add("{money}", Common.digits(GensEconomy.getBalance(this.player)))
                                 .add("{upgradecost}", Common.digits(cost))
-                                .add("{remaining}", Common.digits(VaultEconomy.getBalance(this.player) - cost)));
+                                .add("{remaining}", Common.digits(GensEconomy.getBalance(this.player) - cost)));
                         // play bass sound
                         Utils.bassSound(this.player);
                         // close on no money
@@ -108,7 +108,7 @@ public class ShopInventory extends FastInv {
                     }
                     // Grant the purchase only after the economy confirms payment.
                     try {
-                        EconomyResponse response = VaultEconomy.withdraw(this.player, cost);
+                        EconomyResponse response = GensEconomy.withdraw(this.player, cost);
                         if (response == null || !response.transactionSuccess()) {
                             NextGens.DEFAULT_CONFIG.sendMessage(this.player, "messages.transaction-failed");
                             return;

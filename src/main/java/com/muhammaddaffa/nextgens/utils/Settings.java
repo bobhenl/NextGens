@@ -1,9 +1,13 @@
 package com.muhammaddaffa.nextgens.utils;
 
+import com.muhammaddaffa.mdlib.utils.Common;
 import com.muhammaddaffa.mdlib.utils.Config;
+import com.muhammaddaffa.mdlib.utils.Placeholder;
 import com.muhammaddaffa.nextgens.NextGens;
 import jdk.dynalink.linker.LinkerServices;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -21,7 +25,7 @@ public class Settings {
             FANCY_HOLOGRAM_BILLBOARD, FANCY_HOLOGRAM_TEXT_ALIGNMENT, FANCY_HOLOGRAM_BACKGROUND;
 
     // String List
-    public static List<String> BLACKLISTED_WORLDS, CORRUPTION_BLACKLISTED_GENERATORS, CORRUPTION_HOLOGRAM_LINES;
+    public static List<String> BLACKLISTED_WORLDS, WHITELISTED_WORLDS, CORRUPTION_BLACKLISTED_GENERATORS, CORRUPTION_HOLOGRAM_LINES;
 
     // Integer
     public static int CORRUPTION_PERCENTAGE, CORRUPTION_INTERVAL, CORRUPTION_NOTIFY_INTERVAL, CORRUPT_GUI_SIZE;
@@ -37,6 +41,7 @@ public class Settings {
 
     public static void init() {
         config(); corruptGui();
+        GensEconomy.reset();
     }
 
     public static void config() {
@@ -77,6 +82,7 @@ public class Settings {
 
         // String List
         BLACKLISTED_WORLDS = config.getStringList("blacklisted-worlds");
+        WHITELISTED_WORLDS = config.getStringList("whitelisted-worlds");
         CORRUPTION_BLACKLISTED_GENERATORS = config.getStringList("corruption.blacklisted-generators");
         CORRUPTION_HOLOGRAM_LINES = config.getStringList("corruption.hologram.lines");
 
@@ -105,6 +111,34 @@ public class Settings {
 
         // Integer List
         CORRUPT_GUI_DISPLAY_SLOTS = config.getIntegerList("display-slots");
+    }
+
+
+    /**
+     * Whether generators may be placed and run in this world. A non-empty
+     * whitelisted-worlds list allows only those worlds; blacklisted-worlds always wins.
+     */
+    /**
+     * Broadcasts a message. With a world whitelist set, only players in generator worlds (and the
+     * console) receive it, so generator events do not spam players elsewhere on the server.
+     */
+    public static void broadcast(String message, Placeholder placeholder) {
+        if (WHITELISTED_WORLDS == null || WHITELISTED_WORLDS.isEmpty()) {
+            Common.broadcast(message, placeholder);
+            return;
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (isGeneratorWorld(player.getWorld().getName())) {
+                Common.sendMessage(player, message, placeholder);
+            }
+        }
+        Common.sendMessage(Bukkit.getConsoleSender(), message, placeholder);
+    }
+
+    public static boolean isGeneratorWorld(String world) {
+        if (world == null) return false;
+        if (BLACKLISTED_WORLDS != null && BLACKLISTED_WORLDS.contains(world)) return false;
+        return WHITELISTED_WORLDS == null || WHITELISTED_WORLDS.isEmpty() || WHITELISTED_WORLDS.contains(world);
     }
 
 }

@@ -35,7 +35,7 @@ public class ConfigMessage {
 
     public void broadcast(@Nullable Placeholder placeholder) {
         for (String message : this.getTranslatedMessage(placeholder)) {
-            Common.broadcast(message);
+            Settings.broadcast(message, new Placeholder());
         }
     }
 

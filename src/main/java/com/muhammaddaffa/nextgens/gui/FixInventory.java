@@ -1,7 +1,7 @@
 package com.muhammaddaffa.nextgens.gui;
 
 import com.muhammaddaffa.mdlib.fastinv.FastInv;
-import com.muhammaddaffa.mdlib.hooks.VaultEconomy;
+import com.muhammaddaffa.nextgens.utils.GensEconomy;
 import com.muhammaddaffa.mdlib.utils.*;
 import com.muhammaddaffa.nextgens.NextGens;
 import com.muhammaddaffa.nextgens.generators.ActiveGenerator;
@@ -42,7 +42,7 @@ public class FixInventory extends FastInv {
         // get the slots
         List<Integer> slots = Settings.CORRUPT_GUI_DISPLAY_SLOTS;
         // if player has enough money
-        if (VaultEconomy.getBalance(this.player) >= this.generator.fixCost()) {
+        if (GensEconomy.getBalance(this.player) >= this.generator.fixCost()) {
             this.setFixButton(slots);
         } else {
             this.setNoMoneyButton(slots);
@@ -61,7 +61,7 @@ public class FixInventory extends FastInv {
                         .add("{current}", this.generator.displayName())
                         .add("{speed}", this.generator.interval())
                         .add("{cost}", Common.digits(this.generator.fixCost()))
-                        .add("{balance}", Common.digits(VaultEconomy.getBalance(this.player))));
+                        .add("{balance}", Common.digits(GensEconomy.getBalance(this.player))));
 
         if (config.getBoolean("display-enough-money.glowing")) {
             builder.enchant(Enchantment.INFINITY);
@@ -87,7 +87,7 @@ public class FixInventory extends FastInv {
                         .add("{current}", this.generator.displayName())
                         .add("{speed}", this.generator.interval())
                         .add("{cost}", Common.digits(this.generator.fixCost()))
-                        .add("{balance}", Common.digits(VaultEconomy.getBalance(this.player))));
+                        .add("{balance}", Common.digits(GensEconomy.getBalance(this.player))));
 
         if (config.getBoolean("display-no-money.glowing")) {
             builder.enchant(Enchantment.INFINITY);
@@ -96,9 +96,9 @@ public class FixInventory extends FastInv {
         // set the item
         this.setItems(Utils.convertListToIntArray(slots), builder.build(), event -> {
             NextGens.DEFAULT_CONFIG.sendMessage(this.player, "messages.not-enough-money", new Placeholder()
-                    .add("{money}", Common.digits(VaultEconomy.getBalance(this.player)))
+                    .add("{money}", Common.digits(GensEconomy.getBalance(this.player)))
                     .add("{upgradecost}", Common.digits(this.generator.fixCost()))
-                    .add("{remaining}", Common.digits(VaultEconomy.getBalance(this.player) - this.generator.fixCost())));
+                    .add("{remaining}", Common.digits(GensEconomy.getBalance(this.player) - this.generator.fixCost())));
             // play bass sound
             Utils.bassSound(player);
             // close the gui
